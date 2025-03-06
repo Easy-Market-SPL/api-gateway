@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://localhost:3000"
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowed-headers: "*"
+            allow-credentials: true
+      # Integration with eureka to automatically discover all the routes of the microservices
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+server:
+  port: 8080
+
+# EUREKA CONFIGURATION
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL}
+  instance:
+    instance-id: ${spring.application.name}
